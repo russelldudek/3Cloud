@@ -1,0 +1,53 @@
+name: Build campaign PDFs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - 'styles.css'
+      - 'scripts/build_pdfs.py'
+      - '.github/workflows/build-pdfs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF renderer
+        run: pip install 'weasyprint==66.0'
+      - name: Generate PDFs
+        run: python scripts/build_pdfs.py
+      - name: Verify page counts
+        run: |
+          pip install 'pypdf==5.7.0'
+          python - <<'PY'
+          from pypdf import PdfReader
+          expected = {
+              'docs/russell-dudek-3cloud-resume.pdf': 2,
+              'docs/russell-dudek-3cloud-cover-letter.pdf': 1,
+              'docs/russell-dudek-3cloud-interview-brief.pdf': 6,
+              'docs/3cloud-delivery-seam-review.pdf': 1,
+          }
+          for path, count in expected.items():
+              actual = len(PdfReader(path).pages)
+              if actual != count:
+                  raise SystemExit(f'{path}: expected {count} pages, got {actual}')
+              print(f'{path}: {actual} pages')
+          PY
+      - name: Commit generated PDFs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/*.pdf
+          git diff --cached --quiet && exit 0
+          git commit -m 'Build aligned campaign PDFs'
+          git push
