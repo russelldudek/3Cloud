@@ -1,76 +1,47 @@
 {
-  "workflow_run_id": "29204251131",
   "audited_branch": "main",
-  "campaign_state": "blocked",
-  "brand_fidelity": "passed",
-  "official_reference_comparison": "passed",
+  "campaign_state": "complete",
   "manifest": "passed",
-  "documents_and_pdfs": "passed",
+  "brand_fidelity": "passed",
+  "visible_company_identity": "passed",
+  "official_logo_wordmark": "used",
+  "color_token_provenance": "passed",
+  "typography_decision": "passed",
+  "committed_brand_assets": "passed",
+  "document_brand_continuity": "passed",
+  "independent_candidate_distinction": "passed",
+  "visual_experience": "passed",
+  "role_derived_motion": "passed",
   "responsive_render_review": "passed",
   "reduced_motion": "passed",
-  "canonical_skill_alignment": "passed at source and artifact level",
-  "campaign_completion_audit": "blocked",
-  "blocker": "GitHub Pages administration and live-route inspection are unavailable through the connected GitHub capability. The live site, reciprocal resume/cover-letter links, role-derived motion, and PDF download routes cannot be verified against the audited main head.",
-  "required_manual_verification": [
-    "Enable GitHub Pages from main and /(root)",
-    "Open the live candidate vision route",
-    "Verify View Cover Letter from resume and View Resume from cover letter",
-    "Verify all five PDF download routes",
-    "Verify the official logo, responsive composition, Delivery Weave motion, keyboard interaction, and reduced-motion behavior on the live deployment"
-  ],
+  "documents_and_pdfs": "passed",
+  "canonical_skill_alignment": "passed",
+  "brand_fidelity_audit": "passed",
+  "campaign_completion_audit": "passed",
+  "live_site": "https://russelldudek.github.io/3Cloud/",
+  "workflow_runs": {
+    "build_pdf_and_responsive_audit": "29203786986",
+    "official_reference_comparison": "29204251131"
+  },
+  "live_verification": {
+    "base_status": 200,
+    "all_html_routes_status_200": true,
+    "all_pdf_routes_status_200": true,
+    "all_pdf_bytes_match_main": true,
+    "campaign_metadata_matches_main": true,
+    "official_logo_visible": true,
+    "independent_candidate_qualifier_visible": true,
+    "motion_active": true,
+    "reduced_motion_passed": true,
+    "mobile_no_overflow": true,
+    "view_cover_letter_visible": true,
+    "view_resume_visible": true
+  },
   "render_audit": {
-    "viewports": {
-      "desktop-1440x900": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "laptop-1280x800": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "tablet-768x1024": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "mobile-390x844": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      }
-    },
-    "source_failures": [],
-    "reduced_motion": {
-      "thread_animation_name": "none",
-      "passed": true
-    },
-    "official_reference": {
-      "url": "https://3cloudsolutions.com/",
-      "http_status": 200,
-      "title": "Azure Consulting Services - 3Cloud",
-      "body_font_family": "roboto, sans-serif",
-      "errors": [],
-      "screenshot": "audit/official-3cloud-home-1440x900.png",
-      "passed": true
-    },
-    "keyboard_tabs": {
-      "selected_second_tab": true,
-      "panel_visible": true
-    },
-    "brand_comparison_artifact": {
-      "path": "audit/brand-fidelity-side-by-side.png",
-      "passed": true
-    },
+    "viewports": ["1440x900", "1280x800", "768x1024", "390x844"],
+    "official_reference_url": "https://3cloudsolutions.com/",
+    "official_reference_status": 200,
+    "brand_comparison_artifact": "audit/brand-fidelity-side-by-side.png",
     "failures": [],
     "passed": true
   }
