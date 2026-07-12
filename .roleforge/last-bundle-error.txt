@@ -1,0 +1,38 @@
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+  File "/usr/lib/python3.12/tarfile.py", line 1875, in open
+    return func(name, filemode, fileobj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1930, in gzopen
+    t = cls.taropen(name, mode, fileobj, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1907, in taropen
+    return cls(name, mode, fileobj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1765, in __init__
+    self.firstmember = self.next()
+                       ^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 2766, in next
+    raise ReadError(f'zlib error: {e}') from None
+tarfile.ReadError: zlib error: Error -3 while decompressing data: invalid distance too far back
+encoded characters: 14900
+decoded bytes: 11173
+decoded sha256: 6ca68e61383407a034f266b896e7c6dfc1822aa6992f00e53d2917f68c3db213
+first bytes: b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\x03\xd4\\\xddr\xdc6'
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+  File "/usr/lib/python3.12/tarfile.py", line 1875, in open
+    return func(name, filemode, fileobj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1930, in gzopen
+    t = cls.taropen(name, mode, fileobj, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1907, in taropen
+    return cls(name, mode, fileobj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 1765, in __init__
+    self.firstmember = self.next()
+                       ^^^^^^^^^^^
+  File "/usr/lib/python3.12/tarfile.py", line 2766, in next
+    raise ReadError(f'zlib error: {e}') from None
+tarfile.ReadError: zlib error: Error -3 while decompressing data: invalid distance too far back
