@@ -1,0 +1,353 @@
+{
+  "assets": {
+    "3cloud-logo-blue.jpg": {
+      "content_type": "image/jpeg",
+      "mode": "RGB",
+      "pixel_dimensions": [
+        500,
+        500
+      ],
+      "source_url": "https://3cloudsolutions.com/wp-content/uploads/2021/08/3Cloud-Logo-Blue-500x500.jpg",
+      "status": 200
+    },
+    "3cloud-logo-cognizant.png": {
+      "content_type": "image/png",
+      "mode": "RGBA",
+      "pixel_dimensions": [
+        900,
+        658
+      ],
+      "source_url": "https://3cloudsolutions.com/wp-content/uploads/2026/01/3cloud-logo-cognizant-1.png",
+      "status": 200
+    }
+  },
+  "font_families": [
+    {
+      "occurrences": 25,
+      "value": "ibm-plex-sans,sans-serif"
+    },
+    {
+      "occurrences": 19,
+      "value": "inherit"
+    },
+    {
+      "occurrences": 10,
+      "value": "ibm-plex-sans,sans-serif !important"
+    },
+    {
+      "occurrences": 8,
+      "value": "roboto,sans-serif"
+    },
+    {
+      "occurrences": 6,
+      "value": "dashicons"
+    },
+    {
+      "occurrences": 6,
+      "value": "roboto,sans-serif !important"
+    },
+    {
+      "occurrences": 5,
+      "value": "'Font Awesome 5 Free'"
+    },
+    {
+      "occurrences": 5,
+      "value": "\"ibm-plex-sans\""
+    },
+    {
+      "occurrences": 4,
+      "value": "\"IBM Plex Sans\""
+    },
+    {
+      "occurrences": 4,
+      "value": "\"Font Awesome 5 Free\",sans-serif !important"
+    },
+    {
+      "occurrences": 3,
+      "value": "\"Font Awesome 5 Free\""
+    },
+    {
+      "occurrences": 3,
+      "value": "\"roboto\""
+    },
+    {
+      "occurrences": 3,
+      "value": "Roboto"
+    },
+    {
+      "occurrences": 2,
+      "value": "'Font Awesome 5 Brands'"
+    },
+    {
+      "occurrences": 2,
+      "value": "'Genericons'"
+    },
+    {
+      "occurrences": 2,
+      "value": "\"Genericons\""
+    },
+    {
+      "occurrences": 2,
+      "value": "\"Font Awesome 5 Brands\""
+    },
+    {
+      "occurrences": 2,
+      "value": "\"Font Awesome 5 Brands\",sans-serif"
+    },
+    {
+      "occurrences": 2,
+      "value": "\"Font Awesome 5 Free\",sans-serif"
+    },
+    {
+      "occurrences": 1,
+      "value": "genericons"
+    },
+    {
+      "occurrences": 1,
+      "value": "FontAwesome"
+    },
+    {
+      "occurrences": 1,
+      "value": "'FontAwesome'"
+    },
+    {
+      "occurrences": 1,
+      "value": "\"roboto\",sans-serif"
+    },
+    {
+      "occurrences": 1,
+      "value": "\"ibm-plex-sans\",sans-serif"
+    },
+    {
+      "occurrences": 1,
+      "value": "sans-serif"
+    },
+    {
+      "occurrences": 1,
+      "value": "-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\""
+    },
+    {
+      "occurrences": 1,
+      "value": "monospace, monospace"
+    },
+    {
+      "occurrences": 1,
+      "value": "\"IBM Plex Sans\" !important"
+    }
+  ],
+  "official_home": "https://3cloudsolutions.com/",
+  "sampled_colors": [
+    {
+      "occurrences": 54,
+      "value": "#1E303C"
+    },
+    {
+      "occurrences": 54,
+      "value": "#33AEFF"
+    },
+    {
+      "occurrences": 48,
+      "value": "#005B97"
+    },
+    {
+      "occurrences": 27,
+      "value": "#6C757D"
+    },
+    {
+      "occurrences": 22,
+      "value": "#DC3545"
+    },
+    {
+      "occurrences": 22,
+      "value": "#28A745"
+    },
+    {
+      "occurrences": 19,
+      "value": "#007BFF"
+    },
+    {
+      "occurrences": 17,
+      "value": "#FFC107"
+    },
+    {
+      "occurrences": 17,
+      "value": "#212529"
+    },
+    {
+      "occurrences": 16,
+      "value": "#17A2B8"
+    },
+    {
+      "occurrences": 16,
+      "value": "#343A40"
+    },
+    {
+      "occurrences": 16,
+      "value": "#F8F9FA"
+    },
+    {
+      "occurrences": 12,
+      "value": "#DEE2E6"
+    },
+    {
+      "occurrences": 10,
+      "value": "#F8F8F8"
+    },
+    {
+      "occurrences": 8,
+      "value": "#4B4B4B"
+    },
+    {
+      "occurrences": 6,
+      "value": "#E5EEF4"
+    },
+    {
+      "occurrences": 5,
+      "value": "#F1F1F1"
+    },
+    {
+      "occurrences": 5,
+      "value": "#495057"
+    },
+    {
+      "occurrences": 5,
+      "value": "#FFFFFF"
+    },
+    {
+      "occurrences": 4,
+      "value": "#E9ECEF"
+    },
+    {
+      "occurrences": 4,
+      "value": "#0062CC"
+    },
+    {
+      "occurrences": 4,
+      "value": "#545B62"
+    },
+    {
+      "occurrences": 4,
+      "value": "#1E7E34"
+    },
+    {
+      "occurrences": 4,
+      "value": "#117A8B"
+    },
+    {
+      "occurrences": 4,
+      "value": "#D39E00"
+    },
+    {
+      "occurrences": 4,
+      "value": "#BD2130"
+    },
+    {
+      "occurrences": 4,
+      "value": "#DAE0E5"
+    },
+    {
+      "occurrences": 4,
+      "value": "#1D2124"
+    },
+    {
+      "occurrences": 4,
+      "value": "#E0E0E0"
+    },
+    {
+      "occurrences": 3,
+      "value": "#23262C"
+    },
+    {
+      "occurrences": 3,
+      "value": "#666666"
+    },
+    {
+      "occurrences": 2,
+      "value": "#0056B3"
+    },
+    {
+      "occurrences": 2,
+      "value": "#9FCDFF"
+    },
+    {
+      "occurrences": 2,
+      "value": "#C8CBCF"
+    },
+    {
+      "occurrences": 2,
+      "value": "#B1DFBB"
+    },
+    {
+      "occurrences": 2,
+      "value": "#ABDDE5"
+    },
+    {
+      "occurrences": 2,
+      "value": "#FFE8A1"
+    },
+    {
+      "occurrences": 2,
+      "value": "#F1B0B7"
+    },
+    {
+      "occurrences": 2,
+      "value": "#ECECF6"
+    },
+    {
+      "occurrences": 2,
+      "value": "#B9BBBE"
+    }
+  ],
+  "stylesheets": [
+    {
+      "bytes": 871,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/plugins/simple-banner/simple-banner.css?ver=3.3.0"
+    },
+    {
+      "bytes": 59004,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-includes/css/dashicons.min.css?ver=7.0"
+    },
+    {
+      "bytes": 100403,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/uploads/maxmegamenu/style.css?ver=a98d35"
+    },
+    {
+      "bytes": 27524,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/plugins/megamenu-pro/icons/genericons/genericons/genericons.css?ver=2.2.8"
+    },
+    {
+      "bytes": 31000,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/plugins/megamenu-pro/icons/fontawesome/css/font-awesome.min.css?ver=2.2.8"
+    },
+    {
+      "bytes": 55325,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/plugins/megamenu-pro/icons/fontawesome5/css/all.min.css?ver=2.2.8"
+    },
+    {
+      "bytes": 45687,
+      "status": 200,
+      "url": "https://use.fontawesome.com/releases/v5.1.0/css/all.css?ver=7.0"
+    },
+    {
+      "bytes": 6172,
+      "status": 200,
+      "url": "https://use.typekit.net/alo6emc.css?ver=7.0"
+    },
+    {
+      "bytes": 793571,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/themes/orbit-media-bootstrap4/resources/css/layout.css?ver=1715270940"
+    },
+    {
+      "bytes": 3776,
+      "status": 200,
+      "url": "https://3cloudsolutions.com/wp-content/themes/orbit-media-bootstrap4/resources/css/support.css?ver=1783697772"
+    }
+  ]
+}
