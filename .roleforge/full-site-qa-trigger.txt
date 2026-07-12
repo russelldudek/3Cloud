@@ -1,0 +1,1 @@
+Run full-site QA against the current live deployment before applying the clipping fix.
