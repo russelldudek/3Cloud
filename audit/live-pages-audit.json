@@ -1,0 +1,76 @@
+{
+  "base_url": "https://russelldudek.github.io/3Cloud/",
+  "routes": {
+    "index.html": {
+      "status": 200,
+      "ok": true
+    },
+    "resume.html": {
+      "status": 200,
+      "ok": true
+    },
+    "cover-letter.html": {
+      "status": 200,
+      "ok": true
+    },
+    "interview-brief.html": {
+      "status": 200,
+      "ok": true
+    },
+    "90-day-plan.html": {
+      "status": 200,
+      "ok": true
+    },
+    "delivery-seam-review.html": {
+      "status": 200,
+      "ok": true
+    }
+  },
+  "pdfs": {
+    "docs/russell-dudek-3cloud-resume.pdf": {
+      "status": 200,
+      "content_type": "application/pdf",
+      "bytes": 56946,
+      "matches_main_file": true
+    },
+    "docs/russell-dudek-3cloud-cover-letter.pdf": {
+      "status": 200,
+      "content_type": "application/pdf",
+      "bytes": 46851,
+      "matches_main_file": true
+    },
+    "docs/russell-dudek-3cloud-interview-brief.pdf": {
+      "status": 200,
+      "content_type": "application/pdf",
+      "bytes": 60507,
+      "matches_main_file": true
+    },
+    "docs/russell-dudek-3cloud-90-day-plan.pdf": {
+      "status": 200,
+      "content_type": "application/pdf",
+      "bytes": 52386,
+      "matches_main_file": true
+    },
+    "docs/3cloud-delivery-seam-review.pdf": {
+      "status": 200,
+      "content_type": "application/pdf",
+      "bytes": 50555,
+      "matches_main_file": true
+    }
+  },
+  "checks": {
+    "logo_visible": true,
+    "independent_candidate_qualifier": true,
+    "motion_active": true,
+    "reduced_motion": true,
+    "mobile_no_overflow": true,
+    "metadata_status": 200,
+    "metadata_matches_main_file": true,
+    "resume_status": 200,
+    "view_cover_letter_visible": true,
+    "cover_letter_status": 200,
+    "view_resume_visible": true
+  },
+  "passed": true,
+  "base_status": 200
+}
