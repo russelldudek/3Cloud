@@ -1,52 +1,32 @@
 {
   "workflow_run_id": "29203786986",
   "audited_branch": "main",
-  "campaign_state": "complete",
+  "campaign_state": "blocked",
   "brand_fidelity": "passed",
   "manifest": "passed",
   "documents_and_pdfs": "passed",
   "responsive_render_review": "passed",
   "reduced_motion": "passed",
+  "canonical_skill_alignment": "passed at source and artifact level",
+  "campaign_completion_audit": "blocked",
+  "blocker": "GitHub Pages administration and live-route inspection are unavailable through the connected GitHub capability. The live site, reciprocal resume/cover-letter links, role-derived motion, and PDF download routes cannot be verified against the audited main head.",
+  "required_manual_verification": [
+    "Enable GitHub Pages from main and /(root)",
+    "Open the live candidate vision route",
+    "Verify View Cover Letter from resume and View Resume from cover letter",
+    "Verify all five PDF download routes",
+    "Verify the official logo, responsive composition, Delivery Weave motion, keyboard interaction, and reduced-motion behavior on the live deployment"
+  ],
   "render_audit": {
     "viewports": {
-      "desktop-1440x900": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "laptop-1280x800": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "tablet-768x1024": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      },
-      "mobile-390x844": {
-        "http_status": 200,
-        "logo_visible": true,
-        "independent_candidate_qualifier": true,
-        "horizontal_overflow": false,
-        "errors": []
-      }
+      "desktop-1440x900": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
+      "laptop-1280x800": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
+      "tablet-768x1024": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
+      "mobile-390x844": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []}
     },
     "source_failures": [],
-    "reduced_motion": {
-      "thread_animation_name": "none",
-      "passed": true
-    },
-    "keyboard_tabs": {
-      "selected_second_tab": true,
-      "panel_visible": true
-    },
+    "reduced_motion": {"thread_animation_name": "none", "passed": true},
+    "keyboard_tabs": {"selected_second_tab": true, "panel_visible": true},
     "failures": [],
     "passed": true
   }
