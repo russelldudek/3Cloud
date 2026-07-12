@@ -8,12 +8,13 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
-from PIL import Image
+from PIL import Image, ImageDraw
 from playwright.async_api import async_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT / "audit"
 AUDIT.mkdir(exist_ok=True)
+OFFICIAL_HOME = "https://3cloudsolutions.com/"
 VIEWPORTS = {
     "desktop-1440x900": (1440, 900),
     "laptop-1280x800": (1280, 800),
@@ -61,14 +62,42 @@ def source_checks():
     return failures
 
 
+def create_brand_comparison():
+    official_path = AUDIT / "official-3cloud-home-1440x900.png"
+    campaign_path = AUDIT / "desktop-1440x900.png"
+    output_path = AUDIT / "brand-fidelity-side-by-side.png"
+    if not official_path.exists() or not campaign_path.exists():
+        return False
+
+    official = Image.open(official_path).convert("RGB")
+    campaign_full = Image.open(campaign_path).convert("RGB")
+    campaign = campaign_full.crop((0, 0, min(1440, campaign_full.width), min(900, campaign_full.height)))
+    official = official.resize((720, 450))
+    campaign = campaign.resize((720, 450))
+    canvas = Image.new("RGB", (1440, 500), "white")
+    canvas.paste(official, (0, 50))
+    canvas.paste(campaign, (720, 50))
+    draw = ImageDraw.Draw(canvas)
+    draw.text((20, 15), "Current official 3Cloud home page", fill="black")
+    draw.text((740, 15), "Independent 3Cloud candidate campaign", fill="black")
+    canvas.save(output_path)
+    return output_path.exists() and output_path.stat().st_size > 0
+
+
 async def main():
     failures = source_checks()
     use_file = os.environ.get("ROLEFORGE_FILE_AUDIT") == "1"
     port = free_port()
-    server = None if use_file else subprocess.Popen(["python", "-m", "http.server", str(port), "--bind", "127.0.0.1"], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if server: time.sleep(1)
+    server = None if use_file else subprocess.Popen(
+        ["python", "-m", "http.server", str(port), "--bind", "127.0.0.1"],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if server:
+        time.sleep(1)
     base_url = (ROOT / "index.html").as_uri() if use_file else f"http://127.0.0.1:{port}/index.html"
-    results = {"viewports": {}, "source_failures": failures, "reduced_motion": {}}
+    results = {"viewports": {}, "source_failures": failures, "reduced_motion": {}, "official_reference": {}}
     try:
         async with async_playwright() as p:
             browser = await p.chromium.launch(executable_path=os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or None)
@@ -93,6 +122,33 @@ async def main():
                     failures.append(f"viewport:{name}")
                 await page.close()
 
+            official_page = await browser.new_page(viewport={"width": 1440, "height": 900})
+            official_errors = []
+            official_page.on("pageerror", lambda exc: official_errors.append(f"pageerror:{exc}"))
+            try:
+                official_response = await official_page.goto(OFFICIAL_HOME, wait_until="domcontentloaded", timeout=90000)
+                await official_page.wait_for_timeout(5000)
+                official_title = await official_page.title()
+                official_font = await official_page.locator("body").evaluate("el => getComputedStyle(el).fontFamily")
+                await official_page.screenshot(path=str(AUDIT / "official-3cloud-home-1440x900.png"), full_page=False)
+                official_ok = bool(official_response and official_response.status < 400 and "3Cloud" in official_title)
+                results["official_reference"] = {
+                    "url": OFFICIAL_HOME,
+                    "http_status": official_response.status if official_response else None,
+                    "title": official_title,
+                    "body_font_family": official_font,
+                    "errors": official_errors,
+                    "screenshot": "audit/official-3cloud-home-1440x900.png",
+                    "passed": official_ok and not official_errors,
+                }
+                if not results["official_reference"]["passed"]:
+                    failures.append("official_reference")
+            except Exception as exc:
+                results["official_reference"] = {"url": OFFICIAL_HOME, "passed": False, "error": repr(exc)}
+                failures.append("official_reference")
+            finally:
+                await official_page.close()
+
             page = await browser.new_page(viewport={"width": 1280, "height": 800}, reduced_motion="reduce")
             await page.goto(base_url, wait_until="networkidle")
             animation_name = await page.locator(".thread-data").evaluate("el => getComputedStyle(el).animationName")
@@ -116,12 +172,19 @@ async def main():
             server.terminate()
             server.wait(timeout=10)
 
+    results["brand_comparison_artifact"] = {
+        "path": "audit/brand-fidelity-side-by-side.png",
+        "passed": create_brand_comparison(),
+    }
+    if not results["brand_comparison_artifact"]["passed"]:
+        failures.append("brand_comparison_artifact")
+
     results["failures"] = sorted(set(failures))
     results["passed"] = not results["failures"]
     (AUDIT / "render-audit.json").write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     if failures:
         raise SystemExit("Audit failed: " + ", ".join(sorted(set(failures))))
-    print("Responsive, brand, interaction, and reduced-motion audit passed.")
+    print("Responsive, official-reference brand, interaction, and reduced-motion audit passed.")
 
 
 if __name__ == "__main__":
