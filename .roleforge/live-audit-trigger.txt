@@ -1,0 +1,1 @@
+Probe the expected GitHub Pages deployment and all campaign routes against the current main artifacts.
