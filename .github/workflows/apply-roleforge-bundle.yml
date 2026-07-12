@@ -25,41 +25,65 @@ jobs:
           ref: main
 
       - name: Apply audited source bundle
+        id: apply_bundle
+        continue-on-error: true
         run: |
-          python - <<'PY'
+          python - <<'PY' > /tmp/roleforge-bundle.log 2>&1
           import base64
           import hashlib
           import io
           import tarfile
+          import traceback
           from pathlib import Path
 
-          encoded_path = Path('.roleforge/campaign-source.tar.gz.b64')
-          encoded = ''.join(encoded_path.read_text(encoding='utf-8').split())
-          print(f'encoded characters: {len(encoded)}')
-          archive = base64.b64decode(encoded, validate=False)
-          print(f'decoded bytes: {len(archive)}')
-          print(f'decoded sha256: {hashlib.sha256(archive).hexdigest()}')
-          if not archive.startswith(b'\x1f\x8b'):
-              raise SystemExit('decoded bundle is not gzip data')
-          with tarfile.open(fileobj=io.BytesIO(archive), mode='r:gz') as bundle:
-              members = bundle.getmembers()
-              print(f'archive members: {len(members)}')
-              for member in members[:25]:
-                  print(member.name)
-              bundle.extractall('.')
+          try:
+              encoded_path = Path('.roleforge/campaign-source.tar.gz.b64')
+              encoded = ''.join(encoded_path.read_text(encoding='utf-8').split())
+              print(f'encoded characters: {len(encoded)}')
+              archive = base64.b64decode(encoded, validate=False)
+              print(f'decoded bytes: {len(archive)}')
+              print(f'decoded sha256: {hashlib.sha256(archive).hexdigest()}')
+              print(f'first bytes: {archive[:16]!r}')
+              if not archive.startswith(b'\x1f\x8b'):
+                  raise RuntimeError('decoded bundle is not gzip data')
+              with tarfile.open(fileobj=io.BytesIO(archive), mode='r:gz') as bundle:
+                  members = bundle.getmembers()
+                  print(f'archive members: {len(members)}')
+                  for member in members:
+                      print(member.name)
+                  bundle.extractall('.')
+          except Exception:
+              traceback.print_exc()
+              raise
           PY
+          cat /tmp/roleforge-bundle.log
           rm -f .roleforge/campaign-source.tar.gz.b64 .roleforge/apply-trigger.txt .roleforge/pr-trigger.txt
 
+      - name: Persist extraction failure diagnostics
+        if: steps.apply_bundle.outcome == 'failure'
+        run: |
+          mkdir -p .roleforge
+          cp /tmp/roleforge-bundle.log .roleforge/last-bundle-error.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .roleforge/last-bundle-error.txt
+          git commit -m 'Record RoleForge bundle extraction failure [skip ci]'
+          git push
+          exit 1
+
       - uses: actions/setup-python@v5
+        if: steps.apply_bundle.outcome == 'success'
         with:
           python-version: '3.12'
 
       - name: Install PDF and browser-audit dependencies
+        if: steps.apply_bundle.outcome == 'success'
         run: |
           pip install 'weasyprint==66.0' 'pypdf==5.7.0' 'playwright==1.55.0' 'beautifulsoup4==4.13.4' 'pillow==11.3.0'
           python -m playwright install --with-deps chromium
 
       - name: Generate and verify branded PDFs
+        if: steps.apply_bundle.outcome == 'success'
         run: |
           python scripts/build_pdfs.py
           python - <<'PY'
@@ -83,9 +107,11 @@ jobs:
           PY
 
       - name: Run responsive, brand and interaction audit
+        if: steps.apply_bundle.outcome == 'success'
         run: python scripts/render_audit.py
 
       - name: Record workflow provenance
+        if: steps.apply_bundle.outcome == 'success'
         run: |
           python - <<'PY'
           import json, os
@@ -98,6 +124,7 @@ jobs:
           PY
 
       - name: Upload complete audit evidence
+        if: steps.apply_bundle.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: 3cloud-campaign-brand-completion-audit
@@ -105,6 +132,7 @@ jobs:
           if-no-files-found: error
 
       - name: Commit complete audited campaign to main
+        if: steps.apply_bundle.outcome == 'success'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
