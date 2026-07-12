@@ -1,0 +1,49 @@
+name: Full-site visual and document QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.roleforge/full-site-qa-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install QA dependencies
+        run: |
+          pip install 'playwright==1.55.0' 'pypdf==5.9.0' 'pymupdf==1.26.3'
+          python -m playwright install --with-deps chromium
+
+      - name: Run full-site QA
+        id: qa
+        continue-on-error: true
+        run: |
+          python scripts/site_qa.py \
+            --base-url 'https://russelldudek.github.io/3Cloud/' \
+            --repo-root '.' \
+            --output '/tmp/3cloud-site-qa'
+
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3cloud-full-site-qa
+          path: /tmp/3cloud-site-qa/
+          if-no-files-found: error
+
+      - name: Fail when QA found critical or high defects
+        if: steps.qa.outcome == 'failure'
+        run: exit 1
