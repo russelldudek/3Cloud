@@ -1,2 +1,3 @@
-Rerun the staged RoleForge Brand Fidelity repair and persist exact extraction diagnostics.
-Attempt: 3
+Apply the rebuilt 3Cloud Brand Fidelity source package, generate PDFs, and run the complete responsive audit.
+Attempt: 4
+Package SHA-256: f8a8355f40d40e56e2615937eab709ebe894e701710ae3f44f7a6e84cea004f5
