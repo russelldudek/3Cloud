@@ -2,6 +2,14 @@
 
 Independent RoleForge candidate campaign for Russell Dudek's application to **Senior Consultant - AI** at 3Cloud.
 
+## Campaign status
+
+**Complete.** The campaign source, official brand package, six HTML routes, five generated PDFs, responsive and reduced-motion evidence, official-reference comparison, and live GitHub Pages audit are committed to `main`.
+
+- Live site: https://russelldudek.github.io/3Cloud/
+- Job posting: https://job-boards.greenhouse.io/3cloud/jobs/8229697002?gh_jid=8229697002
+- Publication branch: `main`
+
 ## Thesis
 
 **AI delivery scales at the seams.**
@@ -23,18 +31,24 @@ The campaign argues that the mandate is to turn cross-practice architecture into
 - `brand-tokens.css`
 - `assets/brand/`
 
-The campaign uses the current official 3Cloud logo for nominative employer identification, current official-site color and typography evidence, and explicit independent-candidate language. It does not imply endorsement.
+The campaign uses the current official 3Cloud logo for nominative employer identification, source-sampled official-site colors, public typography evidence, and explicit independent-candidate language. It does not imply endorsement.
 
-## PDF build and audit
+## Audit evidence
 
-Run:
+- `artifact-manifest.json`
+- `audit/render-audit.json`
+- `audit/brand-fidelity-side-by-side.png`
+- `audit/live-pages-audit.json`
+- desktop, laptop, tablet, mobile, reduced-motion, official-reference, and live screenshots under `audit/`
+
+PDF generation asserts the required page counts. Browser audits verify visible company identity, independent-candidate labeling, purposeful motion, keyboard tab behavior, reduced motion, responsive composition, reciprocal document navigation, live routes, and byte equality between each live PDF and its committed `main` file.
+
+## Reproducible checks
 
 ```bash
 python scripts/build_pdfs.py
 python scripts/render_audit.py
 ```
-
-PDF generation asserts the required page counts. The Playwright audit checks desktop, laptop, tablet, mobile, reduced motion, visible official identity, independent-candidate labeling, keyboard tab behavior, internal links, and PDF download routes.
 
 ## Evidence integrity
 
