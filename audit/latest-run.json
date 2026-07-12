@@ -1,8 +1,9 @@
 {
-  "workflow_run_id": "29203786986",
+  "workflow_run_id": "29204251131",
   "audited_branch": "main",
   "campaign_state": "blocked",
   "brand_fidelity": "passed",
+  "official_reference_comparison": "passed",
   "manifest": "passed",
   "documents_and_pdfs": "passed",
   "responsive_render_review": "passed",
@@ -19,14 +20,57 @@
   ],
   "render_audit": {
     "viewports": {
-      "desktop-1440x900": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
-      "laptop-1280x800": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
-      "tablet-768x1024": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []},
-      "mobile-390x844": {"http_status": 200, "logo_visible": true, "independent_candidate_qualifier": true, "horizontal_overflow": false, "errors": []}
+      "desktop-1440x900": {
+        "http_status": 200,
+        "logo_visible": true,
+        "independent_candidate_qualifier": true,
+        "horizontal_overflow": false,
+        "errors": []
+      },
+      "laptop-1280x800": {
+        "http_status": 200,
+        "logo_visible": true,
+        "independent_candidate_qualifier": true,
+        "horizontal_overflow": false,
+        "errors": []
+      },
+      "tablet-768x1024": {
+        "http_status": 200,
+        "logo_visible": true,
+        "independent_candidate_qualifier": true,
+        "horizontal_overflow": false,
+        "errors": []
+      },
+      "mobile-390x844": {
+        "http_status": 200,
+        "logo_visible": true,
+        "independent_candidate_qualifier": true,
+        "horizontal_overflow": false,
+        "errors": []
+      }
     },
     "source_failures": [],
-    "reduced_motion": {"thread_animation_name": "none", "passed": true},
-    "keyboard_tabs": {"selected_second_tab": true, "panel_visible": true},
+    "reduced_motion": {
+      "thread_animation_name": "none",
+      "passed": true
+    },
+    "official_reference": {
+      "url": "https://3cloudsolutions.com/",
+      "http_status": 200,
+      "title": "Azure Consulting Services - 3Cloud",
+      "body_font_family": "roboto, sans-serif",
+      "errors": [],
+      "screenshot": "audit/official-3cloud-home-1440x900.png",
+      "passed": true
+    },
+    "keyboard_tabs": {
+      "selected_second_tab": true,
+      "panel_visible": true
+    },
+    "brand_comparison_artifact": {
+      "path": "audit/brand-fidelity-side-by-side.png",
+      "passed": true
+    },
     "failures": [],
     "passed": true
   }

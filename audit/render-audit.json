@@ -34,9 +34,22 @@
     "thread_animation_name": "none",
     "passed": true
   },
+  "official_reference": {
+    "url": "https://3cloudsolutions.com/",
+    "http_status": 200,
+    "title": "Azure Consulting Services - 3Cloud",
+    "body_font_family": "roboto, sans-serif",
+    "errors": [],
+    "screenshot": "audit/official-3cloud-home-1440x900.png",
+    "passed": true
+  },
   "keyboard_tabs": {
     "selected_second_tab": true,
     "panel_visible": true
+  },
+  "brand_comparison_artifact": {
+    "path": "audit/brand-fidelity-side-by-side.png",
+    "passed": true
   },
   "failures": [],
   "passed": true
