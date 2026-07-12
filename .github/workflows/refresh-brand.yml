@@ -1,0 +1,42 @@
+name: Refresh official brand package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refresh-brand.yml'
+      - 'scripts/refresh_brand.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-brand:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out campaign
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install brand audit dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pillow
+
+      - name: Download official assets and inspect public CSS
+        run: python scripts/refresh_brand.py
+
+      - name: Commit refreshed brand package
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/brand
+          if git diff --cached --quiet; then
+            echo 'Brand package is already current.'
+          else
+            git commit -m 'Refresh official 3Cloud brand package [skip ci]'
+            git push
+          fi
