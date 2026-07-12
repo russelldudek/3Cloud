@@ -13,9 +13,13 @@
   "brand_fidelity": "passed",
   "official_reference_comparison": "passed",
   "live_pages_audit": "passed",
+  "full_site_qa": "passed",
+  "document_clipping_regression": "passed",
   "independent_candidate_work": true,
   "thesis": "AI delivery scales at the seams.",
   "operating_model": "Delivery Weave",
   "build_audit_workflow_run_id": "29203786986",
-  "official_reference_audit_workflow_run_id": "29204251131"
+  "official_reference_audit_workflow_run_id": "29204251131",
+  "full_site_baseline_workflow_run_id": "29205547116",
+  "full_site_repaired_workflow_run_id": "29205845513"
 }
