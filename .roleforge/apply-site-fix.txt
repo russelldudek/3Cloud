@@ -1,0 +1,1 @@
+Apply the document layout-system repair, rebuild every PDF, and verify all six routes locally and live.
