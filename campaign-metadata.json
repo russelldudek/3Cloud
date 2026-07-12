@@ -1,5 +1,5 @@
 {
-  "suggested_chat_name": "3Cloud \u2013 Senior AI Consultant",
+  "suggested_chat_name": "3Cloud – Senior AI Consultant",
   "company": "3Cloud",
   "canonical_role_title": "Senior Consultant - AI",
   "candidate": "Russell Dudek",
@@ -7,7 +7,14 @@
   "publication_branch": "main",
   "job_posting": "https://job-boards.greenhouse.io/3cloud/jobs/8229697002?gh_jid=8229697002",
   "page_size": "US Letter",
-  "campaign_state": "complete",
+  "campaign_state": "blocked",
+  "blocker": "The complete campaign passes source, brand, PDF, responsive, keyboard, and reduced-motion audits on main, but GitHub Pages administration and live-route verification are unavailable through the connected GitHub capability. Live resume/cover-letter reciprocity and PDF routes therefore remain unverified.",
+  "manual_pages_fallback": [
+    "Repository Settings → Pages",
+    "Under Build and deployment choose Deploy from a branch",
+    "Choose main and /(root), then Save",
+    "Verify the live site, reciprocal resume/cover-letter navigation, motion, and all PDF downloads"
+  ],
   "independent_candidate_work": true,
   "thesis": "AI delivery scales at the seams.",
   "operating_model": "Delivery Weave",
