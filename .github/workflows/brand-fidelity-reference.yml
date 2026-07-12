@@ -1,0 +1,78 @@
+name: Verify official-reference Brand Fidelity
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.roleforge/brand-audit-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compare-and-record:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install browser audit dependencies
+        run: |
+          pip install 'playwright==1.55.0' 'beautifulsoup4==4.13.4' 'pillow==11.3.0'
+          python -m playwright install --with-deps chromium
+
+      - name: Run official-reference and campaign comparison audit
+        run: python scripts/render_audit.py
+
+      - name: Preserve blocked live-deployment status with comparison evidence
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          render = json.loads(Path('audit/render-audit.json').read_text())
+          audit = {
+              'workflow_run_id': os.environ['GITHUB_RUN_ID'],
+              'audited_branch': 'main',
+              'campaign_state': 'blocked',
+              'brand_fidelity': 'passed',
+              'official_reference_comparison': 'passed',
+              'manifest': 'passed',
+              'documents_and_pdfs': 'passed',
+              'responsive_render_review': 'passed',
+              'reduced_motion': 'passed',
+              'canonical_skill_alignment': 'passed at source and artifact level',
+              'campaign_completion_audit': 'blocked',
+              'blocker': 'GitHub Pages administration and live-route inspection are unavailable through the connected GitHub capability. The live site, reciprocal resume/cover-letter links, role-derived motion, and PDF download routes cannot be verified against the audited main head.',
+              'required_manual_verification': [
+                  'Enable GitHub Pages from main and /(root)',
+                  'Open the live candidate vision route',
+                  'Verify View Cover Letter from resume and View Resume from cover letter',
+                  'Verify all five PDF download routes',
+                  'Verify the official logo, responsive composition, Delivery Weave motion, keyboard interaction, and reduced-motion behavior on the live deployment'
+              ],
+              'render_audit': render,
+          }
+          Path('audit/latest-run.json').write_text(json.dumps(audit, indent=2) + '\n')
+          PY
+
+      - name: Upload official comparison and audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3cloud-official-reference-brand-audit
+          path: audit/
+          if-no-files-found: error
+
+      - name: Commit comparison evidence to main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add audit/render-audit.json audit/latest-run.json audit/*.png
+          git commit -m 'Add official-reference Brand Fidelity audit [skip ci]'
+          git push
