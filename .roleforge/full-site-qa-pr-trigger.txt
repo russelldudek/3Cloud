@@ -1,0 +1,1 @@
+Verify the repaired live deployment across all routes, viewports, interactions, links, and PDFs.
