@@ -1,0 +1,142 @@
+name: Audit live GitHub Pages deployment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.roleforge/live-audit-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit-live-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install live browser dependencies
+        run: |
+          pip install 'playwright==1.55.0'
+          python -m playwright install --with-deps chromium
+
+      - name: Probe live site and routes
+        run: |
+          cat > /tmp/live_pages_audit.py <<'PY'
+          import asyncio
+          import hashlib
+          import json
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+
+          ROOT = Path.cwd()
+          BASE = 'https://russelldudek.github.io/3Cloud/'
+          ROUTES = ['index.html', 'resume.html', 'cover-letter.html', 'interview-brief.html', '90-day-plan.html', 'delivery-seam-review.html']
+          PDFS = [
+              'docs/russell-dudek-3cloud-resume.pdf',
+              'docs/russell-dudek-3cloud-cover-letter.pdf',
+              'docs/russell-dudek-3cloud-interview-brief.pdf',
+              'docs/russell-dudek-3cloud-90-day-plan.pdf',
+              'docs/3cloud-delivery-seam-review.pdf',
+          ]
+
+          async def main():
+              result = {'base_url': BASE, 'routes': {}, 'pdfs': {}, 'checks': {}, 'passed': False}
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  page = await browser.new_page(viewport={'width': 1440, 'height': 900})
+                  try:
+                      response = await page.goto(BASE, wait_until='domcontentloaded', timeout=60000)
+                      result['base_status'] = response.status if response else None
+                      if response and response.status < 400:
+                          await page.wait_for_timeout(3000)
+                          result['checks']['logo_visible'] = await page.locator('.identity-lockup img').is_visible()
+                          qualifier = await page.locator('.identity-copy').inner_text()
+                          result['checks']['independent_candidate_qualifier'] = 'Independent' in qualifier
+                          result['checks']['motion_active'] = (await page.locator('.thread-data').evaluate('el => getComputedStyle(el).animationName')) != 'none'
+                          await page.screenshot(path='audit/live-desktop-1440x900.png', full_page=True)
+
+                          reduced = await browser.new_page(viewport={'width': 1280, 'height': 800}, reduced_motion='reduce')
+                          await reduced.goto(BASE, wait_until='domcontentloaded', timeout=60000)
+                          result['checks']['reduced_motion'] = (await reduced.locator('.thread-data').evaluate('el => getComputedStyle(el).animationName')) == 'none'
+                          await reduced.close()
+
+                          mobile = await browser.new_page(viewport={'width': 390, 'height': 844})
+                          await mobile.goto(BASE, wait_until='domcontentloaded', timeout=60000)
+                          result['checks']['mobile_no_overflow'] = not await mobile.evaluate('document.documentElement.scrollWidth > document.documentElement.clientWidth + 1')
+                          await mobile.screenshot(path='audit/live-mobile-390x844.png', full_page=True)
+                          await mobile.close()
+
+                      for route in ROUTES:
+                          r = await page.request.get(BASE + route, timeout=60000)
+                          result['routes'][route] = {'status': r.status, 'ok': r.ok}
+
+                      for pdf in PDFS:
+                          r = await page.request.get(BASE + pdf, timeout=60000)
+                          body = await r.body()
+                          local = (ROOT / pdf).read_bytes()
+                          result['pdfs'][pdf] = {
+                              'status': r.status,
+                              'content_type': r.headers.get('content-type'),
+                              'bytes': len(body),
+                              'matches_main_file': hashlib.sha256(body).hexdigest() == hashlib.sha256(local).hexdigest(),
+                          }
+
+                      meta_response = await page.request.get(BASE + 'campaign-metadata.json', timeout=60000)
+                      meta_body = await meta_response.body()
+                      result['checks']['metadata_status'] = meta_response.status
+                      result['checks']['metadata_matches_main_file'] = hashlib.sha256(meta_body).hexdigest() == hashlib.sha256((ROOT / 'campaign-metadata.json').read_bytes()).hexdigest()
+
+                      resume = await browser.new_page(viewport={'width': 1280, 'height': 800})
+                      rr = await resume.goto(BASE + 'resume.html', wait_until='domcontentloaded', timeout=60000)
+                      result['checks']['resume_status'] = rr.status if rr else None
+                      result['checks']['view_cover_letter_visible'] = await resume.get_by_text('View Cover Letter', exact=True).is_visible() if rr and rr.status < 400 else False
+                      cover = await browser.new_page(viewport={'width': 1280, 'height': 800})
+                      cr = await cover.goto(BASE + 'cover-letter.html', wait_until='domcontentloaded', timeout=60000)
+                      result['checks']['cover_letter_status'] = cr.status if cr else None
+                      result['checks']['view_resume_visible'] = await cover.get_by_text('View Resume', exact=True).is_visible() if cr and cr.status < 400 else False
+                      await resume.close()
+                      await cover.close()
+                  except Exception as exc:
+                      result['error'] = repr(exc)
+                  finally:
+                      await page.close()
+                      await browser.close()
+
+              route_pass = all(item['ok'] for item in result['routes'].values()) if result['routes'] else False
+              pdf_pass = all(item['status'] == 200 and item['matches_main_file'] for item in result['pdfs'].values()) if result['pdfs'] else False
+              checks = result['checks']
+              required_checks = ['logo_visible', 'independent_candidate_qualifier', 'motion_active', 'reduced_motion', 'mobile_no_overflow', 'metadata_matches_main_file', 'view_cover_letter_visible', 'view_resume_visible']
+              checks_pass = all(checks.get(name) is True for name in required_checks)
+              result['passed'] = result.get('base_status') == 200 and route_pass and pdf_pass and checks_pass
+              Path('audit/live-pages-audit.json').write_text(json.dumps(result, indent=2) + '\n')
+              print(json.dumps(result, indent=2))
+
+          asyncio.run(main())
+          PY
+          python /tmp/live_pages_audit.py
+
+      - name: Upload live audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3cloud-live-pages-audit
+          path: |
+            audit/live-pages-audit.json
+            audit/live-*.png
+          if-no-files-found: error
+
+      - name: Commit live audit record and remove trigger
+        run: |
+          rm -f .roleforge/live-audit-trigger.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Record live GitHub Pages audit [skip ci]'
+          git push
