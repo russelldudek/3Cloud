@@ -1,0 +1,8 @@
+{
+  "routes": ["index.html", "resume.html", "cover-letter.html", "interview-brief.html", "90-day-plan.html", "delivery-seam-review.html"],
+  "styles": ["styles.css", "brand-tokens.css"],
+  "scripts": ["app.js", "scripts/build_pdfs.py", "scripts/render_audit.py"],
+  "brand": ["brand-intelligence.md", "assets/brand/3cloud-logo-cognizant.png", "assets/brand/3cloud-logo-blue.jpg", "assets/brand/provenance.json", "assets/brand/official-source-snapshot.md"],
+  "pdfs": ["docs/russell-dudek-3cloud-resume.pdf", "docs/russell-dudek-3cloud-cover-letter.pdf", "docs/russell-dudek-3cloud-interview-brief.pdf", "docs/russell-dudek-3cloud-90-day-plan.pdf", "docs/3cloud-delivery-seam-review.pdf"],
+  "metadata": ["campaign-metadata.json", "artifact-manifest.json", "README.md"]
+}

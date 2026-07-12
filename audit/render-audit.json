@@ -1,0 +1,43 @@
+{
+  "viewports": {
+    "desktop-1440x900": {
+      "http_status": 200,
+      "logo_visible": true,
+      "independent_candidate_qualifier": true,
+      "horizontal_overflow": false,
+      "errors": []
+    },
+    "laptop-1280x800": {
+      "http_status": 200,
+      "logo_visible": true,
+      "independent_candidate_qualifier": true,
+      "horizontal_overflow": false,
+      "errors": []
+    },
+    "tablet-768x1024": {
+      "http_status": 200,
+      "logo_visible": true,
+      "independent_candidate_qualifier": true,
+      "horizontal_overflow": false,
+      "errors": []
+    },
+    "mobile-390x844": {
+      "http_status": 200,
+      "logo_visible": true,
+      "independent_candidate_qualifier": true,
+      "horizontal_overflow": false,
+      "errors": []
+    }
+  },
+  "source_failures": [],
+  "reduced_motion": {
+    "thread_animation_name": "none",
+    "passed": true
+  },
+  "keyboard_tabs": {
+    "selected_second_tab": true,
+    "panel_visible": true
+  },
+  "failures": [],
+  "passed": true
+}

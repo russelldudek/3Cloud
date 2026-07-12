@@ -1,2 +1,0 @@
-Apply the staged RoleForge Brand Fidelity repair to main.
-Bundle SHA-256: 630ae5682e332a3c832f1b85fa2f31315fd01a12f7f0863205cc31e5695f3683

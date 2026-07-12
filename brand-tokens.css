@@ -1,0 +1,13 @@
+:root {
+  /* Source-sampled from current official 3Cloud website CSS. */
+  --brand-ink: #1E303C;
+  --brand-blue: #005B97;
+  --brand-sky: #33AEFF;
+  --brand-white: #FFFFFF;
+  --brand-mist: #E5EEF4;
+  --brand-gray: #6C757D;
+  /* Candidate-original accent used only for Delivery Weave decision states. */
+  --campaign-signal: #F2B544;
+  --campaign-risk: #C85C5C;
+  --campaign-success: #2C8A6D;
+}
