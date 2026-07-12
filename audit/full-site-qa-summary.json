@@ -1,0 +1,63 @@
+{
+  "user_reported_defect": "delivery-seam-review.html was clipped at the bottom in the live web view",
+  "root_cause": "Desktop document sheets used a fixed 11-inch height with overflow hidden while footers were absolutely positioned inside the same canvas. Content taller than the sheet was discarded, and narrow screens inherited footer collisions and tablet-width overflow.",
+  "baseline": {
+    "workflow_run_id": "29205547116",
+    "routes": 6,
+    "viewports": ["1440x900", "1280x800", "768x1024", "390x844"],
+    "rendered_route_viewport_combinations": 24,
+    "total_findings": 48,
+    "critical": 30,
+    "high": 6,
+    "medium": 12,
+    "passed": false,
+    "confirmed_defects": [
+      "Delivery Seam Review clipped on desktop, laptop, and tablet",
+      "Document footers overlapped content on narrow screens",
+      "Fixed-width document pages overflowed the 768px tablet viewport",
+      "Resume, cover letter, and 90-day plan lacked a semantic H1"
+    ]
+  },
+  "repair": {
+    "source_commit": "e26e72bb7b88df9898a925b58f32809a3793ce38",
+    "strategy": [
+      "Allow screen document sheets to grow with content while retaining fixed US Letter print rules",
+      "Return footers to normal flow at tablet and mobile widths",
+      "Recompose document width below 840px",
+      "Use document-scale worksheet headings instead of site-scale marketing H2 headings",
+      "Add semantic H1 structure to the resume, cover letter, and 90-day plan",
+      "Rebuild and page-count-verify every PDF"
+    ]
+  },
+  "final_live_qa": {
+    "workflow_run_id": "29205845513",
+    "routes": 6,
+    "viewports": ["1440x900", "1280x800", "768x1024", "390x844"],
+    "rendered_route_viewport_combinations": 24,
+    "pdfs_rendered_and_inspected": 5,
+    "pdf_pages_rendered": 11,
+    "keyboard_interaction": "passed",
+    "reduced_motion": "passed",
+    "internal_links": "passed",
+    "runtime_errors": 0,
+    "horizontal_overflow_failures": 0,
+    "document_canvas_overflow_failures": 0,
+    "document_footer_overlap_failures": 0,
+    "missing_h1_failures": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "passed": true
+  },
+  "manual_visual_review": {
+    "delivery_seam_review_desktop": "passed; complete Closeout Harvest section, candidate thesis, and footer are visible",
+    "delivery_seam_review_tablet": "passed; no horizontal overflow or bottom clipping",
+    "delivery_seam_review_mobile": "passed; all fields, tables, checklists, thesis, and footer remain visible",
+    "resume_tablet": "passed; both pages remain fully composed without viewport overflow",
+    "cover_letter_mobile": "passed; signature and footer no longer collide",
+    "90_day_plan_mobile": "passed; both page sections and footers remain visible",
+    "interview_brief_mobile": "passed; all five page surfaces remain complete",
+    "generated_pdfs": "passed; required page counts retained and rendered pages show no clipping"
+  },
+  "environment_note": "The preferred browser plugin was unavailable, so the audit used standard Playwright Chromium in GitHub Actions, with full-page screenshots and PDF rasterization retained in the workflow artifacts."
+}
