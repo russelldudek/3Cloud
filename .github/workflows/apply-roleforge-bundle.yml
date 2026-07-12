@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - '.roleforge/campaign-source.tar.gz.b64'
+      - '.roleforge/apply-trigger.txt'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -22,7 +24,7 @@ jobs:
         run: |
           base64 --decode .roleforge/campaign-source.tar.gz.b64 > /tmp/campaign-source.tar.gz
           tar -xzf /tmp/campaign-source.tar.gz -C .
-          rm -f .roleforge/campaign-source.tar.gz.b64
+          rm -f .roleforge/campaign-source.tar.gz.b64 .roleforge/apply-trigger.txt
 
       - uses: actions/setup-python@v5
         with:
