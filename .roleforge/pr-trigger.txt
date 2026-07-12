@@ -1,2 +1,2 @@
-Rerun the staged RoleForge Brand Fidelity repair with the hardened decoder.
-Attempt: 2
+Rerun the staged RoleForge Brand Fidelity repair and persist exact extraction diagnostics.
+Attempt: 3
