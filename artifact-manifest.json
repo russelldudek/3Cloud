@@ -4,5 +4,7 @@
   "scripts": ["app.js", "scripts/build_pdfs.py", "scripts/render_audit.py"],
   "brand": ["brand-intelligence.md", "assets/brand/3cloud-logo-cognizant.png", "assets/brand/3cloud-logo-blue.jpg", "assets/brand/provenance.json", "assets/brand/official-source-snapshot.md"],
   "pdfs": ["docs/russell-dudek-3cloud-resume.pdf", "docs/russell-dudek-3cloud-cover-letter.pdf", "docs/russell-dudek-3cloud-interview-brief.pdf", "docs/russell-dudek-3cloud-90-day-plan.pdf", "docs/3cloud-delivery-seam-review.pdf"],
+  "audit": ["audit/render-audit.json", "audit/latest-run.json", "audit/desktop-1440x900.png", "audit/laptop-1280x800.png", "audit/tablet-768x1024.png", "audit/mobile-390x844.png", "audit/reduced-motion-1280x800.png", "audit/official-3cloud-home-1440x900.png", "audit/brand-fidelity-side-by-side.png"],
+  "automation": [".github/workflows/brand-fidelity-reference.yml"],
   "metadata": ["campaign-metadata.json", "artifact-manifest.json", "README.md"]
 }
