@@ -1,0 +1,1 @@
+Verify live deployment against final full-site QA head 2569ea7e70fdca9bfc44503d56fe6900144f45d9.
