@@ -8,7 +8,9 @@
   "job_posting": "https://job-boards.greenhouse.io/3cloud/jobs/8229697002?gh_jid=8229697002",
   "page_size": "US Letter",
   "campaign_state": "blocked",
-  "blocker": "The complete campaign passes source, brand, PDF, responsive, keyboard, and reduced-motion audits on main, but GitHub Pages administration and live-route verification are unavailable through the connected GitHub capability. Live resume/cover-letter reciprocity and PDF routes therefore remain unverified.",
+  "brand_fidelity": "passed",
+  "official_reference_comparison": "passed",
+  "blocker": "The complete campaign passes source, brand, official-reference comparison, PDF, responsive, keyboard, and reduced-motion audits on main, but GitHub Pages administration and live-route verification are unavailable through the connected GitHub capability. Live resume/cover-letter reciprocity and PDF routes therefore remain unverified.",
   "manual_pages_fallback": [
     "Repository Settings → Pages",
     "Under Build and deployment choose Deploy from a branch",
@@ -18,5 +20,6 @@
   "independent_candidate_work": true,
   "thesis": "AI delivery scales at the seams.",
   "operating_model": "Delivery Weave",
-  "audit_workflow_run_id": "29203786986"
+  "build_audit_workflow_run_id": "29203786986",
+  "official_reference_audit_workflow_run_id": "29204251131"
 }
