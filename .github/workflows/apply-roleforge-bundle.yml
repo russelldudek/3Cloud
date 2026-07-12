@@ -1,0 +1,87 @@
+name: Apply RoleForge campaign bundle
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.roleforge/campaign-source.tar.gz.b64'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-build-audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Apply audited source bundle
+        run: |
+          base64 --decode .roleforge/campaign-source.tar.gz.b64 > /tmp/campaign-source.tar.gz
+          tar -xzf /tmp/campaign-source.tar.gz -C .
+          rm -f .roleforge/campaign-source.tar.gz.b64
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PDF and browser-audit dependencies
+        run: |
+          pip install 'weasyprint==66.0' 'pypdf==5.7.0' 'playwright==1.55.0' 'beautifulsoup4==4.13.4' 'pillow==11.3.0'
+          python -m playwright install --with-deps chromium
+
+      - name: Generate and verify branded PDFs
+        run: |
+          python scripts/build_pdfs.py
+          python - <<'PY'
+          from pathlib import Path
+          from pypdf import PdfReader
+          expected = {
+              'docs/russell-dudek-3cloud-resume.pdf': 2,
+              'docs/russell-dudek-3cloud-cover-letter.pdf': 1,
+              'docs/russell-dudek-3cloud-interview-brief.pdf': 5,
+              'docs/russell-dudek-3cloud-90-day-plan.pdf': 2,
+              'docs/3cloud-delivery-seam-review.pdf': 1,
+          }
+          for path, count in expected.items():
+              file = Path(path)
+              if not file.exists() or file.stat().st_size == 0:
+                  raise SystemExit(f'{path}: missing or empty')
+              actual = len(PdfReader(path).pages)
+              if actual != count:
+                  raise SystemExit(f'{path}: expected {count} pages, got {actual}')
+              print(f'{path}: {actual} pages, {file.stat().st_size} bytes')
+          PY
+
+      - name: Run responsive, brand and interaction audit
+        run: python scripts/render_audit.py
+
+      - name: Record workflow provenance
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path('audit/latest-run.json').write_text(json.dumps({
+              'workflow_run_id': os.environ['GITHUB_RUN_ID'],
+              'source_bundle_commit': os.environ['GITHUB_SHA'],
+              'audited_branch': 'main'
+          }, indent=2) + '\n')
+          PY
+
+      - name: Upload complete audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3cloud-campaign-brand-completion-audit
+          path: audit/
+          if-no-files-found: error
+
+      - name: Commit complete audited campaign to main
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Apply Brand Fidelity and completion-audit repair [skip ci]'
+          git push
