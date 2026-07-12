@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - '.roleforge/live-audit-trigger.txt'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.roleforge/final-live-audit-trigger.txt'
   workflow_dispatch:
 
 permissions:
@@ -29,10 +33,12 @@ jobs:
 
       - name: Probe live site and routes
         run: |
+          export AUDITED_MAIN_HEAD="$(git rev-parse HEAD)"
           cat > /tmp/live_pages_audit.py <<'PY'
           import asyncio
           import hashlib
           import json
+          import os
           from pathlib import Path
           from playwright.async_api import async_playwright
 
@@ -48,7 +54,14 @@ jobs:
           ]
 
           async def main():
-              result = {'base_url': BASE, 'routes': {}, 'pdfs': {}, 'checks': {}, 'passed': False}
+              result = {
+                  'base_url': BASE,
+                  'audited_main_head': os.environ['AUDITED_MAIN_HEAD'],
+                  'routes': {},
+                  'pdfs': {},
+                  'checks': {},
+                  'passed': False,
+              }
               async with async_playwright() as p:
                   browser = await p.chromium.launch()
                   page = await browser.new_page(viewport={'width': 1440, 'height': 900})
@@ -118,6 +131,8 @@ jobs:
               result['passed'] = result.get('base_status') == 200 and route_pass and pdf_pass and checks_pass
               Path('audit/live-pages-audit.json').write_text(json.dumps(result, indent=2) + '\n')
               print(json.dumps(result, indent=2))
+              if not result['passed']:
+                  raise SystemExit('Live Pages audit failed')
 
           asyncio.run(main())
           PY
@@ -132,7 +147,8 @@ jobs:
             audit/live-*.png
           if-no-files-found: error
 
-      - name: Commit live audit record and remove trigger
+      - name: Commit diagnostic audit record and remove trigger
+        if: github.event_name == 'push'
         run: |
           rm -f .roleforge/live-audit-trigger.txt
           git config user.name 'github-actions[bot]'
