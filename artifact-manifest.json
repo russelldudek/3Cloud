@@ -36,6 +36,7 @@
     "audit/render-audit.json",
     "audit/latest-run.json",
     "audit/live-pages-audit.json",
+    "audit/full-site-qa-summary.json",
     "audit/desktop-1440x900.png",
     "audit/laptop-1280x800.png",
     "audit/tablet-768x1024.png",
@@ -49,8 +50,7 @@
   "automation": [
     ".github/workflows/brand-fidelity-reference.yml",
     ".github/workflows/live-pages-audit.yml",
-    ".github/workflows/full-site-qa.yml",
-    ".github/workflows/apply-full-site-fix.yml"
+    ".github/workflows/full-site-qa.yml"
   ],
   "metadata": [
     "campaign-metadata.json",
