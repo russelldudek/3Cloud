@@ -19,6 +19,25 @@ jobs:
         with:
           ref: main
 
+      - name: Apply chunked audited source package
+        run: |
+          python - <<'PY'
+          import base64, hashlib, io, tarfile
+          from pathlib import Path
+          parts = sorted(Path('.roleforge/source-parts').glob('part-*.b64'))
+          if not parts:
+              raise SystemExit('No source package parts found')
+          encoded = ''.join(''.join(p.read_text().split()) for p in parts)
+          archive = base64.b64decode(encoded, validate=True)
+          expected = Path('.roleforge/source-parts/sha256.txt').read_text().strip()
+          actual = hashlib.sha256(archive).hexdigest()
+          if actual != expected:
+              raise SystemExit(f'Source package SHA mismatch: expected {expected}, got {actual}')
+          with tarfile.open(fileobj=io.BytesIO(archive), mode='r:gz') as bundle:
+              bundle.extractall('.')
+          print(f'Applied {len(parts)} parts, {len(archive)} bytes, sha256 {actual}')
+          PY
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -76,6 +95,7 @@ jobs:
 
       - name: Commit audited campaign to main
         run: |
+          rm -rf .roleforge/source-parts
           rm -f .roleforge/campaign-source.tar.gz.b64 .roleforge/apply-trigger.txt .roleforge/last-bundle-error.txt
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
