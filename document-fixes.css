@@ -1,0 +1,98 @@
+/* Screen-only document QA repairs.
+   Print remains governed by styles.css US Letter rules. */
+.resume-name { margin: 0; }
+.plan-doc h1 {
+  font-size: 20pt;
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  color: var(--brand-ink);
+  margin: 0 0 12px;
+}
+
+@media screen {
+  .paper {
+    height: auto;
+    min-height: 11in;
+    overflow: visible;
+    padding-bottom: .58in;
+  }
+
+  .worksheet h2 {
+    max-width: none;
+    margin: 10px 0 4px;
+    font-size: 1.08rem;
+    line-height: 1.15;
+    letter-spacing: -.015em;
+    color: var(--brand-ink);
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .doc-toolbar { position: static; }
+  .paper-stack {
+    padding: 12px 0 40px;
+    gap: 16px;
+  }
+  .paper,
+  .brief-page,
+  .worksheet-page {
+    width: calc(100% - 24px);
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    padding: 22px;
+  }
+  .doc-brand {
+    margin: -22px -22px 16px;
+    padding: 14px 18px;
+  }
+  .doc-foot {
+    position: static;
+    margin-top: 20px;
+    padding-top: 7px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .resume-head,
+  .letter-head {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .contact { text-align: left; }
+  .brief-cover {
+    margin: -22px;
+    min-height: 0;
+    padding: 32px 24px;
+  }
+  .brief-cover h1 {
+    margin: 42px 0 20px;
+    font-size: clamp(2.6rem, 10vw, 4.2rem);
+  }
+  .brief-cover p { font-size: 1rem; }
+  .brief-cover .cover-bottom { flex-wrap: wrap; }
+}
+
+@media screen and (max-width: 540px) {
+  .paper,
+  .brief-page,
+  .worksheet-page {
+    width: 100%;
+    padding: 20px;
+    box-shadow: none;
+  }
+  .doc-brand { margin: -20px -20px 14px; }
+  .brief-cover {
+    margin: -20px;
+    padding: 28px 20px;
+  }
+  .doc-grid-2,
+  .worksheet .field-row,
+  .worksheet .check-grid {
+    grid-template-columns: 1fr;
+  }
+  .doc-toolbar a,
+  .doc-toolbar button {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}

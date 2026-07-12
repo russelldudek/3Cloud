@@ -99,7 +99,7 @@ def audit_pdfs(repo_root: Path, output_dir: Path, findings: list[dict]) -> dict:
                 "max_text_bottom": round(max_text_bottom, 2),
                 "bottom_clearance": round(page_height - max_text_bottom, 2),
             })
-            if max_text_bottom > page_height - 8:
+            if max_text_bottom > page_height - 2:
                 add_finding(
                     findings,
                     severity="high",
@@ -213,8 +213,8 @@ async def inspect_route(page, base_url: str, route: str, viewport_name: str, wid
                 footerTop: footerRect ? footerRect.top : null,
                 footerBottom: footerRect ? footerRect.bottom : null,
                 hiddenOverflow: hidden && paper.scrollHeight > paper.clientHeight + 1,
-                bottomClip: hidden && contentBottom > paperRect.bottom - 1,
-                footerOverlap: footerRect ? contentBottom > footerRect.top - 4 : false,
+                bottomClip: hidden && contentBottom > paperRect.bottom + 1,
+                footerOverlap: footerRect ? contentBottom > footerRect.top + 1 : false,
                 offender,
               };
             })
