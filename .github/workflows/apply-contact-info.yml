@@ -1,0 +1,84 @@
+name: Add verified contact information and rebuild documents
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.roleforge/apply-contact-info.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-documents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install document and QA dependencies
+        run: |
+          pip install 'weasyprint==66.0' 'pypdf==5.9.0' 'playwright==1.55.0' 'pymupdf==1.26.3'
+          python -m playwright install --with-deps chromium
+
+      - name: Add verified contact information
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          contact = '<div class="contact">Pittsburgh, Pennsylvania · <a href="tel:+14122878640">412.287.8640</a><br><a href="mailto:russelldudek@gmail.com">russelldudek@gmail.com</a> · <a href="https://www.linkedin.com/in/russelldudek">linkedin.com/in/russelldudek</a><br><a href="https://russelldudek.github.io/3Cloud/">russelldudek.github.io/3Cloud/</a></div>'
+          cover_contact = '<div class="contact">Pittsburgh, Pennsylvania · <a href="tel:+14122878640">412.287.8640</a><br><a href="mailto:russelldudek@gmail.com">russelldudek@gmail.com</a> · <a href="https://www.linkedin.com/in/russelldudek">linkedin.com/in/russelldudek</a><br>July 12, 2026 · <a href="https://russelldudek.github.io/3Cloud/">russelldudek.github.io/3Cloud/</a></div>'
+
+          resume_path = Path('resume.html')
+          resume = resume_path.read_text()
+          old_first = '<div class="contact">Pittsburgh, Pennsylvania<br>Candidate vision: russelldudek.github.io/3Cloud/</div>'
+          old_second = '<div class="contact">Candidate vision: russelldudek.github.io/3Cloud/</div>'
+          if resume.count(old_first) != 1 or resume.count(old_second) != 1:
+              raise SystemExit('Resume contact blocks did not match the audited source.')
+          resume = resume.replace(old_first, contact).replace(old_second, contact)
+          resume_path.write_text(resume)
+
+          cover_path = Path('cover-letter.html')
+          cover = cover_path.read_text()
+          old_cover = '<div class="contact">Pittsburgh, Pennsylvania<br>July 12, 2026<br>russelldudek.github.io/3Cloud/</div>'
+          if cover.count(old_cover) != 1:
+              raise SystemExit('Cover-letter contact block did not match the audited source.')
+          cover_path.write_text(cover.replace(old_cover, cover_contact))
+
+          css_path = Path('document-fixes.css')
+          css = css_path.read_text()
+          rule = '\n.contact a { color: inherit; text-decoration: none; }\n.contact a:hover { text-decoration: underline; }\n'
+          if '.contact a {' not in css:
+              css_path.write_text(css.rstrip() + rule)
+          PY
+
+      - name: Rebuild and page-count documents
+        run: python scripts/build_pdfs.py
+
+      - name: Verify local rendered site and contact artifacts
+        run: |
+          python -m http.server 8000 >/tmp/3cloud-contact-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID' EXIT
+          sleep 2
+          python scripts/contact_qa.py --base-url 'http://127.0.0.1:8000/'
+          python scripts/site_qa.py \
+            --base-url 'http://127.0.0.1:8000/' \
+            --repo-root '.' \
+            --output '/tmp/3cloud-contact-site-qa'
+
+      - name: Commit verified documents and retire one-time workflow
+        run: |
+          git config user.name 'RoleForge QA'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm .github/workflows/apply-contact-info.yml .roleforge/apply-contact-info.txt
+          git add resume.html cover-letter.html document-fixes.css docs/*.pdf
+          git commit -m 'Add verified contact information to application documents [skip ci]'
+          git push origin HEAD:main
