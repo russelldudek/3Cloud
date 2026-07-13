@@ -1,0 +1,1 @@
+Verify GitHub Pages serves the exact rebuilt resume and cover-letter PDFs from main after adding verified contact information.
