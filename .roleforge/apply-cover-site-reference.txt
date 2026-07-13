@@ -1,0 +1,1 @@
+Add a brief body reference to the independent candidate vision at russelldudek.github.io/3Cloud/, rebuild the one-page PDF, and rerun document and full-site QA.
