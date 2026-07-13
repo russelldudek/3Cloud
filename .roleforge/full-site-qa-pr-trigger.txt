@@ -1,0 +1,1 @@
+Verify the deployed resume and cover letter HTML/PDF artifacts contain Russell Dudek's complete verified contact block and retain all responsive, accessibility, and pagination guarantees.
