@@ -96,3 +96,5 @@
     text-align: center;
   }
 }
+.contact a { color: inherit; text-decoration: none; }
+.contact a:hover { text-decoration: underline; }
