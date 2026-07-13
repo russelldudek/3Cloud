@@ -32,13 +32,20 @@ jobs:
           python -m playwright install --with-deps chromium
 
       - name: Run full-site QA
-        id: qa
+        id: site_qa
         continue-on-error: true
         run: |
           python scripts/site_qa.py \
             --base-url 'https://russelldudek.github.io/3Cloud/' \
             --repo-root '.' \
             --output '/tmp/3cloud-site-qa'
+
+      - name: Verify resume and cover-letter contact information
+        id: contact_qa
+        continue-on-error: true
+        run: |
+          python scripts/contact_qa.py \
+            --base-url 'https://russelldudek.github.io/3Cloud/'
 
       - name: Upload QA evidence
         if: always()
@@ -48,6 +55,6 @@ jobs:
           path: /tmp/3cloud-site-qa/
           if-no-files-found: error
 
-      - name: Fail when QA found critical or high defects
-        if: steps.qa.outcome == 'failure'
+      - name: Fail when QA found defects
+        if: steps.site_qa.outcome == 'failure' || steps.contact_qa.outcome == 'failure'
         run: exit 1
