@@ -1,0 +1,1 @@
+Verify GitHub Pages serves exact main head 8a74c6eeb5e53f9296844c76ca66bafad145eb6a, including the rebuilt cover-letter PDF and live reciprocal document routes.
