@@ -1,0 +1,67 @@
+name: Add candidate-vision reference to cover letter
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.roleforge/apply-cover-site-reference.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-cover-letter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install document and QA dependencies
+        run: |
+          pip install 'weasyprint==66.0' 'pypdf==5.9.0' 'playwright==1.55.0' 'pymupdf==1.26.3'
+          python -m playwright install --with-deps chromium
+
+      - name: Add brief candidate-vision reference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('cover-letter.html')
+          html = path.read_text()
+          old = '<p>My candidate thesis is simple: <strong>AI delivery scales at the seams.</strong> Ground the workflow and data boundary. Compose the smallest coherent system. Prove behavior with evaluation and risk evidence. Observe the system in real work. Harvest only what is genuinely reusable. It is a concrete demonstration of how I think—not a claim about undisclosed 3Cloud process.</p>'
+          new = '<p>My candidate thesis is simple: <strong>AI delivery scales at the seams.</strong> Ground the workflow and data boundary. Compose the smallest coherent system. Prove behavior with evaluation and risk evidence. Observe the system in real work. Harvest only what is genuinely reusable. I made that reasoning visible in an independent candidate vision at <a href="https://russelldudek.github.io/3Cloud/">russelldudek.github.io/3Cloud/</a>, including the Delivery Weave, a 90-day plan, and a Delivery Seam Review—not as a claim about undisclosed 3Cloud process, but as a transparent demonstration of how I would approach the work.</p>'
+          if html.count(old) != 1:
+              raise SystemExit('Audited cover-letter thesis paragraph did not match expected source.')
+          path.write_text(html.replace(old, new))
+          PY
+
+      - name: Rebuild and page-count PDFs
+        run: python scripts/build_pdfs.py
+
+      - name: Verify local document and full-site behavior
+        run: |
+          python -m http.server 8000 >/tmp/3cloud-cover-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID' EXIT
+          sleep 2
+          python scripts/contact_qa.py --base-url 'http://127.0.0.1:8000/'
+          python scripts/site_qa.py \
+            --base-url 'http://127.0.0.1:8000/' \
+            --repo-root '.' \
+            --output '/tmp/3cloud-cover-site-qa'
+
+      - name: Commit verified cover letter and retire workflow
+        run: |
+          git config user.name 'RoleForge QA'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm .github/workflows/apply-cover-site-reference.yml .roleforge/apply-cover-site-reference.txt
+          git add cover-letter.html docs/russell-dudek-3cloud-cover-letter.pdf
+          git commit -m 'Reference candidate vision in cover letter [skip ci]'
+          git push origin HEAD:main
