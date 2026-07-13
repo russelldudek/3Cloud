@@ -1,0 +1,1 @@
+Verify that the resume and cover letter HTML/PDF artifacts contain Russell Dudek's complete verified contact block.
