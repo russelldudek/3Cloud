@@ -14,6 +14,9 @@ REQUIRED = [
     "linkedin.com/in/russelldudek",
 ]
 
+CAMPAIGN_URL = "russelldudek.github.io/3Cloud/"
+COVER_BODY_PHRASE = "independent candidate vision"
+
 HTML_ROUTES = ["resume.html", "cover-letter.html"]
 PDF_ROUTES = [
     "docs/russell-dudek-3cloud-resume.pdf",
@@ -38,6 +41,16 @@ def check_text(label: str, text: str) -> list[str]:
     return [f"{label}: missing {item}" for item in REQUIRED if item not in normalized]
 
 
+def check_cover_body(label: str, text: str) -> list[str]:
+    normalized = normalize(text).lower()
+    failures: list[str] = []
+    if COVER_BODY_PHRASE not in normalized:
+        failures.append(f"{label}: missing brief body explanation of the independent candidate vision")
+    if normalized.count(CAMPAIGN_URL.lower()) < 3:
+        failures.append(f"{label}: campaign URL must appear in header, body, and footer")
+    return failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", required=True)
@@ -49,12 +62,16 @@ def main() -> int:
         url = urljoin(args.base_url, route)
         html = fetch(url).decode("utf-8", errors="replace")
         failures.extend(check_text(route, html))
+        if route == "cover-letter.html":
+            failures.extend(check_cover_body(route, html))
 
     for route in PDF_ROUTES:
         url = urljoin(args.base_url, route)
         reader = PdfReader(io.BytesIO(fetch(url)))
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
         failures.extend(check_text(route, text))
+        if route.endswith("cover-letter.pdf"):
+            failures.extend(check_cover_body(route, text))
 
     if failures:
         print("Contact QA failed:")
@@ -62,7 +79,7 @@ def main() -> int:
             print(f"- {failure}")
         return 1
 
-    print("Contact QA passed for resume HTML/PDF and cover-letter HTML/PDF.")
+    print("Contact QA passed for resume HTML/PDF and cover-letter HTML/PDF, including the candidate-vision body reference.")
     return 0
 
 
